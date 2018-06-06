@@ -1,5 +1,7 @@
 class Student
   attr_accessor :id, :name, :grade
+  
+  @@all = []
 
   def self.new_from_db(row)
     s = Student.new
@@ -15,7 +17,9 @@ class Student
       students
       SQL
       
-    DB[:conn].execute(sql)
+    DB[:conn].execute(sql).map do |row|
+      @all << sql.new_from_db(row)
+    end
   end
 
   def self.find_by_name(name)
